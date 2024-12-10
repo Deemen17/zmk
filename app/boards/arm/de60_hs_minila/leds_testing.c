@@ -29,14 +29,14 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 // GPIO-based LED device
 static const struct device *led_dev = DEVICE_DT_GET(LED_GPIO_NODE_ID);
 
-// 
+// Output status state structure
 struct output_status_state {
     struct zmk_endpoint_instance selected_endpoint;
     bool active_profile_connected;
     bool active_profile_bonded;
 };
 
-// 
+// Get current state of the device
 static struct output_status_state get_state(const zmk_event_t *_eh) {
     return (struct output_status_state){
         .selected_endpoint = zmk_endpoints_selected(),
@@ -45,12 +45,12 @@ static struct output_status_state get_state(const zmk_event_t *_eh) {
     };
 }
 
-// Timer và trạng thái cho LED BLE quảng bá
+// Timer and status for BLE advertising LED
 static struct k_timer ble_adv_timer;
 static bool ble_adv_led_on = false;
 static int ble_adv_led_index = -1;
 
-// Hàm callback của timer để nháy LED
+// Timer callback function to blink LED
 static void ble_adv_timer_handler(struct k_timer *timer_id) {
     if (ble_adv_led_index >= 0) {
         if (ble_adv_led_on) {
@@ -58,11 +58,9 @@ static void ble_adv_timer_handler(struct k_timer *timer_id) {
         } else {
             led_on(led_dev, ble_adv_led_index);
         }
-        ble_adv_led_on = !ble_adv_led_on; // Đảo trạng thái LED
+        ble_adv_led_on = !ble_adv_led_on; // Toggle LED state
     }
 }
-
-
 
 // Caps Lock Indicator
 static int led_keylock_listener_cb(const zmk_event_t *eh) {
@@ -80,8 +78,9 @@ static int led_keylock_listener_cb(const zmk_event_t *eh) {
 
 // Output Selection Indicators
 
+// Set the status LED based on the current state
 static void set_status_led(struct output_status_state state) {
-    // Tắt tất cả các LED trước khi bật LED tương ứng
+    // Turn off all LEDs before turning on the corresponding LED
     led_off(led_dev, DT_NODE_CHILD_IDX(DT_ALIAS(led_usb)));
     led_off(led_dev, DT_NODE_CHILD_IDX(DT_ALIAS(led_ble_0)));
     led_off(led_dev, DT_NODE_CHILD_IDX(DT_ALIAS(led_ble_1)));
@@ -89,13 +88,13 @@ static void set_status_led(struct output_status_state state) {
 
     switch (state.selected_endpoint.transport) {
     case ZMK_TRANSPORT_USB:
-        // Bật LED USB
+        // Turn on USB LED
         led_on(led_dev, DT_NODE_CHILD_IDX(DT_ALIAS(led_usb)));
         break;
     case ZMK_TRANSPORT_BLE:
         if (state.active_profile_bonded) {
             if (state.active_profile_connected) {
-                // Bật LED BLE đã kết nối
+                // Turn on connected BLE LED
                 switch (state.selected_endpoint.ble.profile_index) {
                 case 0:
                     led_on(led_dev, DT_NODE_CHILD_IDX(DT_ALIAS(led_ble_0)));
@@ -108,7 +107,7 @@ static void set_status_led(struct output_status_state state) {
                     break;
                 }
             } else {
-                // BLE chưa kết nối - có thể để trống hoặc thêm logic
+                // BLE not connected - could leave empty or add logic
             }
         } else {
             switch (state.selected_endpoint.ble.profile_index) {
@@ -123,15 +122,16 @@ static void set_status_led(struct output_status_state state) {
                 break;
             }
 
-            // Khởi động timer để nháy LED
+            // Start timer to blink LED
             if (ble_adv_led_index >= 0) {
-                k_timer_start(&ble_adv_timer, K_MSEC(500), K_MSEC(500)); // 500ms nháy
+                k_timer_start(&ble_adv_timer, K_MSEC(500), K_MSEC(500)); // 500ms blink
             }
         }
         break;
     }
 }
 
+// Output status update callback
 static int output_status_update_cb(const zmk_event_t *_eh) {
     struct output_status_state state = get_state(_eh);
     set_status_led(state);
@@ -142,13 +142,13 @@ static int output_status_update_cb(const zmk_event_t *_eh) {
 ZMK_LISTENER(led_indicators_listener, led_keylock_listener_cb);
 ZMK_SUBSCRIPTION(led_indicators_listener, zmk_hid_indicators_changed);
 
-
 ZMK_LISTENER(output_status, output_status_update_cb);
 #if defined(CONFIG_ZMK_BLE)
 ZMK_SUBSCRIPTION(output_status, zmk_ble_active_profile_changed);
 #endif
 ZMK_SUBSCRIPTION(output_status, zmk_endpoint_changed);
 
+// LED initialization
 static int leds_init(const struct device *device) {
     if (!device_is_ready(led_dev)) {
         return -ENODEV;
@@ -158,7 +158,7 @@ static int leds_init(const struct device *device) {
 }
 
 int output_status_init(void) {
-    // Khởi tạo timer nháy LED
+    // Initialize LED blink timer
     k_timer_init(&ble_adv_timer, ble_adv_timer_handler, NULL);
     return 0;
 }
