@@ -4,6 +4,8 @@ manifest:
       url-base: https://github.com/zephyrproject-rtos
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: Deemen17
+      url-base: https://github.com/Deemen17
   projects:
     - name: zephyr
       remote: zmkfirmware
@@ -37,5 +39,9 @@ manifest:
       revision: 6cb4c283e76209d59c45fbcb218800cd19e9339d
       path: modules/msgs/zmk-studio-messages
       remote: zmkfirmware
+    - name: zmk-rgbled-widget 
+      remote: Deemen17
+      revision: main
+      path: modules/zmk-rgbled-widget
   self:
     west-commands: scripts/west-commands.yml
