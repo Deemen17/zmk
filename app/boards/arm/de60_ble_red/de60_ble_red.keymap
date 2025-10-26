@@ -41,55 +41,55 @@
 };
 
 &soft_off {
-    hold-time-ms = <3>; // Only turn off it the key is held for 3 seconds or longer.
+    hold-time-ms = <2000>; // Only turn off it the key is held for 3 seconds or longer.
 };
 
 / {
-    combos {
-        compatible = "zmk,combos";
+    // combos {
+    //     compatible = "zmk,combos";
 
-        // ESC + 1 + 2 = &sys_reset
-        combo_sys_reset {
-            timeout-ms = <100>;
-            key-positions = <0 1 2>;
-            bindings = <&sys_reset>;
-        };
+    //     // ESC + 1 + 2 = &sys_reset
+    //     combo_sys_reset {
+    //         timeout-ms = <100>;
+    //         key-positions = <0 1 2>;
+    //         bindings = <&sys_reset>;
+    //     };
 
-        // 1 + 2 + 3 = &bootloader
-        combo_bootloader {
-            timeout-ms = <100>;
-            key-positions = <1 2 3>;
-            bindings = <&bootloader>;
-        };
+    //     // 1 + 2 + 3 = &bootloader
+    //     combo_bootloader {
+    //         timeout-ms = <100>;
+    //         key-positions = <1 2 3>;
+    //         bindings = <&bootloader>;
+    //     };
 
-        // ESC + 1 = &bt BT0
-        combo_bt0 {
-            timeout-ms = <100>;
-            key-positions = <0 1>;
-            bindings = <&bt BT0 &ind_con>;
-        };
+    //     // ESC + 1 = &bt BT0
+    //     combo_bt0 {
+    //         timeout-ms = <100>;
+    //         key-positions = <0 1>;
+    //         bindings = <&bt BT0 &ind_con>;
+    //     };
 
-        // ESC + 2 = &bt BT1
-        combo_bt1 {
-            timeout-ms = <100>;
-            key-positions = <0 2>;
-            bindings = <&bt BT1 &ind_con>;
-        };
+    //     // ESC + 2 = &bt BT1
+    //     combo_bt1 {
+    //         timeout-ms = <100>;
+    //         key-positions = <0 2>;
+    //         bindings = <&bt BT1 &ind_con>;
+    //     };
 
-        // ESC + 3 = &bt BT2
-        combo_bt2 {
-            timeout-ms = <100>;
-            key-positions = <0 3>;
-            bindings = <&bt BT2 &ind_con>;
-        };
+    //     // ESC + 3 = &bt BT2
+    //     combo_bt2 {
+    //         timeout-ms = <100>;
+    //         key-positions = <0 3>;
+    //         bindings = <&bt BT2 &ind_con>;
+    //     };
 
-        // ESC + TAB = &bt BT_CLR
-        combo_bt_clr {
-            timeout-ms = <100>;
-            key-positions = <0 15>;
-            bindings = <&bt BT_CLR &ind_con>;
-        };
-    };
+    //     // ESC + TAB = &bt BT_CLR
+    //     combo_bt_clr {
+    //         timeout-ms = <100>;
+    //         key-positions = <0 15>;
+    //         bindings = <&bt BT_CLR &ind_con>;
+    //     };
+    // };
 
     keymap {
         compatible = "zmk,keymap";
@@ -98,7 +98,7 @@
             label = "Windows";
             bindings = <
 &kp ESC   &kp N1   &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9    &kp N0   &kp MINUS &kp EQUAL &kp BSLH  &kp DEL 
-&kp TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSPC  
+&lt FUN TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSPC  
 &kp CLCK  &kp A    &kp S   &kp D   &kp F   &kp G   &kp H   &kp J   &kp K   &kp L     &kp SEMI &kp SQT             &kp ENTER 
 &kp LSHFT          &kp Z   &kp X   &kp C   &kp V   &kp B   &kp N   &kp M   &kp COMMA &kp DOT  &kp FSLH  &mt RSHFT UP &mo FUN
 &kp LCTRL &kp LGUI &kp LALT                        &kp SPACE                                  &kp LEFT  &kp DOWN  &kp RIGHT
@@ -108,11 +108,11 @@
         layer_1 {
             label = "Mac";
             bindings = < 
-&kp ESC   &kp N1   &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9    &kp N0   &kp MINUS &kp EQUAL &kp BSLH  &kp DEL 
-&kp TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSPC  
-&kp CLCK  &kp A    &kp S   &kp D   &kp F   &kp G   &kp H   &kp J   &kp K   &kp L     &kp SEMI &kp SQT             &kp ENTER 
-&kp LSHFT          &kp Z   &kp X   &kp C   &kp V   &kp B   &kp N   &kp M   &kp COMMA &kp DOT  &kp FSLH  &mt RSHFT UP &trans
-&kp LCTRL &kp LALT &kp LGUI                        &kp SPACE                                  &kp LEFT  &kp DOWN  &kp RIGHT
+&trans  &trans   &trans  &trans &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans   &trans  &trans &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans   &trans  &trans &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans          &trans
+&trans           &trans  &trans &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &kp LALT &kp LGUI                       &trans                                  &trans  &trans  &trans
             >;
         };
 

@@ -20,8 +20,6 @@
 
 #define OUTUSB &out OUT_USB
 #define OUTBLE &out OUT_BLE
-// #define OUTESB &out OUT_ESB  // Future custom ESB endpoint
-// ESB switching: OUTUSB → OUTBLE → OUTESB
 
 #define SOOFF &soft_off
 
@@ -44,6 +42,7 @@
 #define BOTLR &bootloader
 
 #define FUN_CLCK &lt FUN CAPS
+#define FUN_TAB &lt FUN TAB
 
 #define WIN 0
 #define MAC 1
@@ -77,10 +76,10 @@
             label = "Windows";
             bindings = <
 &kp ESC   &kp N1   &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9    &kp N0   &kp MINUS &kp EQUAL &kp BSLH  &kp DEL 
-&kp TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSPC  
-FUN_CLCK  &kp A    &kp S   &kp D   &kp F   &kp G   &kp H   &kp J   &kp K   &kp L     &kp SEMI &kp SQT             &kp ENTER 
+FUN_TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSPC  
+&kp CAPS  &kp A    &kp S   &kp D   &kp F   &kp G   &kp H   &kp J   &kp K   &kp L     &kp SEMI &kp SQT             &kp ENTER 
 &kp LSHFT &kp NUBS &kp Z   &kp X   &kp C   &kp V   &kp B   &kp N   &kp M   &kp COMMA &kp DOT  &kp FSLH  &td_rshift_up &mo FUN
-&kp LCTRL &kp LGUI &kp LALT                        &kp SPACE               &kp RGUI  &mo FUN  &kp LEFT  &kp DOWN  &kp RIGHT
+&kp LCTRL &kp LGUI &kp LALT                        &kp SPACE               &kp RALT  &mo FUN  &kp LEFT  &kp DOWN  &kp RIGHT
             >;
         };
 
