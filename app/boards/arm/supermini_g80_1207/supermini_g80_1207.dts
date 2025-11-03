@@ -1,0 +1,171 @@
+/*
+ * Copyright (c) 2025 DEEMEN17 WORKS
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <dt-bindings/led/led.h>
+
+#include "supermini_g80_1207-transforms.dtsi"
+#include "supermini_g80_1207-pinctrl.dtsi"
+#include "supermini_g80_1207-layouts.dtsi"
+
+/ {
+    model = "Supermini G80-1207";
+    compatible = "DEEMEN17-WORKS";
+
+    chosen {
+        zephyr,code-partition = &code_partition;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zmk,battery = &vbatt;
+        zmk,kscan = &kscan0;
+        zmk,studio-rpc-uart = &cdc_acm_uart;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+        diode-direction = "row2col";
+
+        row-gpios
+            = <&gpio0  6  GPIO_ACTIVE_HIGH>   /* ROW 0 */
+            , <&gpio0  8  GPIO_ACTIVE_HIGH>   /* ROW 1 */
+            , <&gpio0 17  GPIO_ACTIVE_HIGH>   /* ROW 2 */
+            , <&gpio0 20  GPIO_ACTIVE_HIGH>   /* ROW 3 */
+            , <&gpio0 22  GPIO_ACTIVE_HIGH>   /* ROW 4 */
+            , <&gpio0 24  GPIO_ACTIVE_HIGH>   /* ROW 5 */
+            , <&gpio1  0  GPIO_ACTIVE_HIGH>   /* ROW 6 */
+            , <&gpio0 11  GPIO_ACTIVE_HIGH>   /* ROW 7 */
+            , <&gpio1  4  GPIO_ACTIVE_HIGH>   /* ROW 8 */
+            , <&gpio1  6  GPIO_ACTIVE_HIGH>   /* ROW 9 */
+            , <&gpio0  9  GPIO_ACTIVE_HIGH>   /* ROW 10 */
+            , <&gpio0 10  GPIO_ACTIVE_HIGH>   /* ROW 11 */
+            , <&gpio1 11  GPIO_ACTIVE_HIGH>   /* ROW 12 */
+            ;
+
+        col-gpios
+            = <&mcp0  0  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 0 */
+            , <&mcp0  1  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 1 */
+            , <&mcp0  2  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 2 */
+            , <&mcp0  3  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 3 */
+            , <&mcp0  4  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 4 */
+            , <&mcp0  5  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 5 */
+            , <&mcp0  6  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 6 */
+            , <&mcp0  7  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* COL 7 */
+            ;
+    };
+
+    EXT_POWER {
+        compatible = "zmk,ext-power-generic";
+        control-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        init-delay-ms = <50>;
+    };
+
+    vbatt: vbatt {
+        compatible = "zmk,battery-nrf-vddh";
+    };
+
+    leds {
+        compatible = "gpio-leds";
+        blue_led: led_0 {
+            gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
+        };
+        led_caps: led_caps {
+            gpios = <&gpio0  2 GPIO_ACTIVE_HIGH>;
+        };
+        led_num: led_num {
+            gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
+        };
+        led_scroll: led_scroll {
+            gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+};
+
+&i2c0 {
+    status = "okay";
+    compatible = "nordic,nrf-twi";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    wakeup-source;
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+
+    mcp0: mcp23017@20 {
+        compatible = "microchip,mcp230xx";
+        status = "okay";
+        gpio-controller;
+        wakeup-source;
+        reg = <0x20>;
+        #gpio-cells = <2>;
+        ngpios = <16>;
+        // int-gpios = <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+    };
+};
+
+&adc {
+    status = "okay";
+};
+
+&gpiote {
+    status = "okay";
+};
+
+&gpio0 {
+    status = "okay";
+};
+
+&gpio1 {
+    status = "okay";
+};
+
+zephyr_udc0: &usbd {
+    status = "okay";
+};
+
+&usbd {
+    status = "okay";
+    cdc_acm_uart: cdc_acm_uart {
+        compatible = "zephyr,cdc-acm-uart";
+    };
+};
+
+&flash0 {
+    /*
+     * For more information, see:
+     * http://docs.zephyrproject.org/latest/devices/dts/flash_partitions.html
+     */
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        sd_partition: partition@0 {
+            reg = <0x00000000 0x00026000>;
+        };
+        code_partition: partition@26000 {
+            reg = <0x00026000 0x000c6000>;
+        };
+
+        /*
+         * The flash starting at 0x000ec000 and ending at
+         * 0x000f3fff is reserved for use by the application.
+         */
+
+        /*
+         * Storage partition will be used by FCB/LittleFS/NVS
+         * if enabled.
+         */
+        storage_partition: partition@ec000 {
+            reg = <0x000ec000 0x00008000>;
+        };
+
+        boot_partition: partition@f4000 {
+            reg = <0x000f4000 0x0000c000>;
+        };
+    };
+};

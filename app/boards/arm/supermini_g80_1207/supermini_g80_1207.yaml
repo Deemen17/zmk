@@ -1,0 +1,15 @@
+identifier: supermini_g80_1207
+name: Supermini G80-1207
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - adc
+  - usb_device
+  - ble
+  - ieee802154
+  - pwm
+  - watchdog
