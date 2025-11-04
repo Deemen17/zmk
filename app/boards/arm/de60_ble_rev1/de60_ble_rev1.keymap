@@ -54,11 +54,89 @@
 };
 
 &soft_off {
-    hold-time-ms = <2000>; // Only turn off it the key is held for 2 seconds or longer.
+    hold-time-ms = <0>; // Only turn off it the key is held for 2 seconds or longer.
 };
 
 
 / {
+
+    macros {
+
+        de60_by_deemen17: select_deemen17_for_unlimited {
+            display-name = "@ DE60 BLE REV1 by DEEMEN17 WORKS";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&kp D>,
+                  <&kp E>,
+                  <&kp E>,
+                  <&kp M>,
+                  <&kp E>,
+                  <&kp N>,
+                  <&kp N1>,
+                  <&kp N7>;
+        };
+
+        tutor_0: select_tutorial_0 {
+            display-name = "!!! Select Key Press to choose keyboard input !!!";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&kp D>,
+                  <&kp E>,
+                  <&kp E>,
+                  <&kp M>,
+                  <&kp E>,
+                  <&kp N>,
+                  <&kp N1>,
+                  <&kp N7>;
+        };
+
+        bt_0: select_bluetooth_0 {
+            display-name = "Select Bluetooth Profile 0";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&out OUT_BLE>,
+                  <&bt BT_SEL 0>;
+        };
+
+        bt_1: select_bluetooth_1 {
+            display-name = "Select Bluetooth Profile 1";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&out OUT_BLE>,
+                  <&bt BT_SEL 1>;
+        };
+
+        bt_2: select_bluetooth_2 {
+            display-name = "Select Bluetooth Profile 2";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&out OUT_BLE>,
+                  <&bt BT_SEL 2>;
+        };
+
+        bt_3: select_bluetooth_3 {
+            display-name = "Select Bluetooth Profile 3";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&out OUT_BLE>,
+                  <&bt BT_SEL 3>;
+        };
+
+        bt_4: select_bluetooth_4 {
+            display-name = "Select Bluetooth Profile 4";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&out OUT_BLE>,
+                  <&bt BT_SEL 4>;
+        };
+    };
 
     behaviors {
         td_rshift_up: tap_dance_rshift_up {
@@ -98,7 +176,7 @@ FUN_TAB   &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O
             label = "Function";
             bindings = <
 &kp GRAVE  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6  &kp F7 &kp F8  &kp F9  &kp F10 &kp F11 &kp F12 &kp F13 &kp F14
-&ind_con   &bt BT0 &bt BT1 &bt BT2 &trans  &trans  UGHUD   UGHUI  UGSAD   UGSAI   UGSPD   UGSPI   UGEFR   UGEFF
+&ind_con   &bt_0   &bt_1   &bt_2   &trans  &trans  UGHUD   UGHUI  UGSAD   UGSAI   UGSPD   UGSPI   UGEFR   UGEFF
 &trans     &trans  SOOFF   &trans  &trans  &trans  &trans  &trans &trans  UGTOG   RESET   BOTLR           &trans
 &ind_bat   &trans  &trans  &bt BTC &trans  &trans  OUTBLE  OUTUSB &trans  UGBRD   UGBRI   &trans  VOLUP   &trans
 &trans     &to WIN &to MAC                         &kp C_PP               &trans  &trans  &trans  VOLDN   &trans
