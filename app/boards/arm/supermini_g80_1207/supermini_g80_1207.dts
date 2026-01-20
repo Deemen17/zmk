@@ -12,6 +12,7 @@
 #include "supermini_g80_1207-pinctrl.dtsi"
 #include "supermini_g80_1207-layouts.dtsi"
 
+
 / {
     model = "Supermini G80-1207";
     compatible = "DEEMEN17-WORKS";
@@ -22,39 +23,68 @@
         zephyr,flash = &flash0;
         zmk,battery = &vbatt;
         zmk,kscan = &kscan0;
+        // zmk,matrix-transform = &default_transform;
         zmk,studio-rpc-uart = &cdc_acm_uart;
     };
 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
-        diode-direction = "row2col";
 
+        // diode-direction = "col2row";
+        // row-gpios
+        //     = <&gpio0 17  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 0 */
+        //     , <&gpio0 22  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 1 */
+        //     , <&gpio0 11  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 2 */
+        //     , <&gpio1  4  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 3 */
+        //     , <&gpio0  9  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 4 TRUE */
+        //     , <&gpio0 31  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 5 */
+        //     , <&gpio0 29  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 6 */
+        //     , <&gpio0  2  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 7 */
+        //     , <&gpio0 20  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 8 TRUE */ 
+        //     , <&gpio1 15  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 9 */
+        //     , <&gpio1 13  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 10 */
+        //     , <&gpio1  0  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 11 TRUE */
+        //     , <&gpio0 24  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* ROW 12 TRUE */
+        //     ;
+
+        // col-gpios
+        //     = <&mcp_col  3  GPIO_ACTIVE_HIGH>   /* COL 0 */
+        //     , <&mcp_col  2  GPIO_ACTIVE_HIGH>   /* COL 1 */
+        //     , <&mcp_col  1  GPIO_ACTIVE_HIGH>   /* COL 2 */
+        //     , <&mcp_col  0  GPIO_ACTIVE_HIGH>   /* COL 3 */
+        //     , <&mcp_col  7  GPIO_ACTIVE_HIGH>   /* COL 4 */
+        //     , <&mcp_col  6  GPIO_ACTIVE_HIGH>   /* COL 5 */
+        //     , <&mcp_col  5  GPIO_ACTIVE_HIGH>   /* COL 6 */
+        //     , <&mcp_col  4  GPIO_ACTIVE_HIGH>   /* COL 7 */
+        //     ;
+
+        diode-direction = "row2col";
         row-gpios
-            = <&gpio0 17  GPIO_ACTIVE_HIGH>   /* ROW 0 */
-            , <&gpio0 22  GPIO_ACTIVE_HIGH>   /* ROW 1 */
-            , <&gpio0 11  GPIO_ACTIVE_HIGH>   /* ROW 2 */
-            , <&gpio1  4  GPIO_ACTIVE_HIGH>   /* ROW 3 */
-            , <&gpio0  9  GPIO_ACTIVE_HIGH>   /* ROW 4 TRUE */
-            , <&gpio0 31  GPIO_ACTIVE_HIGH>   /* ROW 5 */
-            , <&gpio0 29  GPIO_ACTIVE_HIGH>   /* ROW 6 */
-            , <&gpio0  2  GPIO_ACTIVE_HIGH>   /* ROW 7 */
-            , <&gpio0 20  GPIO_ACTIVE_HIGH>   /* ROW 8 TRUE */ 
-            , <&gpio1 15  GPIO_ACTIVE_HIGH>   /* ROW 9 */
-            , <&gpio1 13  GPIO_ACTIVE_HIGH>   /* ROW 10 */
-            , <&gpio1  0  GPIO_ACTIVE_HIGH>   /* ROW 11 TRUE */
-            , <&gpio0 24  GPIO_ACTIVE_HIGH>   /* ROW 12 TRUE */
+            = <&mcp_row 15  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 0 */
+            , <&mcp_row  6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 1 */
+            , <&mcp_row 14  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 2 */
+            , <&mcp_row  5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 3 */
+            , <&mcp_row  3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 4 */
+            , <&mcp_row 13  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 5 */
+            , <&mcp_row  4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 6 */
+            , <&mcp_row 12  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 7 */
+            , <&mcp_row  1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 8 */ 
+            , <&mcp_row 11  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 9 */
+            , <&mcp_row 10  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 10 */
+            , <&mcp_row  0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 11 */
+            , <&mcp_row  2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* ROW 12 */
             ;
 
         col-gpios
-            = <&mcp0  3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 0 */
-            , <&mcp0  2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 1 */
-            , <&mcp0  1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 2 */
-            , <&mcp0  0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 3 */
-            , <&mcp0  7  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 4 */
-            , <&mcp0  6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 5 */
-            , <&mcp0  5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 6 */
-            , <&mcp0  4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* COL 7 */
+            = <&mcp_col  3  GPIO_ACTIVE_LOW>   /* COL 0 */
+            , <&mcp_col  2  GPIO_ACTIVE_LOW>   /* COL 1 */
+            , <&mcp_col  1  GPIO_ACTIVE_LOW>   /* COL 2 */
+            , <&mcp_col  0  GPIO_ACTIVE_LOW>   /* COL 3 */
+            , <&mcp_col  7  GPIO_ACTIVE_LOW>   /* COL 4 */
+            , <&mcp_col  6  GPIO_ACTIVE_LOW>   /* COL 5 */
+            , <&mcp_col  5  GPIO_ACTIVE_LOW>   /* COL 6 */
+            , <&mcp_col  4  GPIO_ACTIVE_LOW>   /* COL 7 */
             ;
 
     };
@@ -71,18 +101,18 @@
 
     leds {
         compatible = "gpio-leds";
-        blue_led: led_0 {
-            gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
-        };
-        led_caps: led_caps {
-            gpios = <&gpio0  2 GPIO_ACTIVE_HIGH>;
-        };
-        led_num: led_num {
-            gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
-        };
-        led_scroll: led_scroll {
-            gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-        };
+        // blue_led: led_0 {
+        //     gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
+        // };
+        // led_caps: led_caps {
+        //     gpios = <&gpio0  2 GPIO_ACTIVE_HIGH>;
+        // };
+        // led_num: led_num {
+        //     gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
+        // };
+        // led_scroll: led_scroll {
+        //     gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+        // };
     };
 
 };
@@ -93,18 +123,26 @@
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
-    wakeup-source;
-    clock-frequency = <I2C_BITRATE_STANDARD>;
+    clock-frequency = <I2C_BITRATE_FAST>;
 
-    mcp0: mcp23017@20 {
+    mcp_row: mcp23017@20 {
         compatible = "microchip,mcp230xx";
         status = "okay";
         gpio-controller;
-        wakeup-source;
         reg = <0x20>;
         #gpio-cells = <2>;
         ngpios = <16>;
-        // int-gpios = <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        int-gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
+    };
+
+    mcp_col: mcp23017@21 {
+        compatible = "microchip,mcp230xx";
+        status = "okay";
+        gpio-controller;
+        reg = <0x21>;
+        #gpio-cells = <2>;
+        ngpios = <16>;
+        int-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
     };
 };
 
