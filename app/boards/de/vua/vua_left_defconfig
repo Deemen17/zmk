@@ -1,0 +1,43 @@
+#
+# Copyright (c) 2023 Deemen17
+# SPDX-License-Identifier: MIT
+#
+
+# Enable both USB and BLE
+CONFIG_ZMK_USB=y
+CONFIG_ZMK_BLE=y
+
+# Keyboard IDs
+CONFIG_ZMK_KEYBOARD_NAME="VUA LEFT"
+CONFIG_USB_DEVICE_PID=0xea65
+CONFIG_USB_DEVICE_VID=0xde17
+CONFIG_USB_DEVICE_MANUFACTURER="EagleV"
+
+CONFIG_BT_DIS_PNP_PID=0xea65
+CONFIG_BT_DIS_PNP_VID=0xde17
+CONFIG_BT_DIS_MANUF="EagleV"
+CONFIG_BT_DIS_MODEL="VUA LEFT"
+
+CONFIG_BT_CTLR_TX_PWR_PLUS_8=y
+
+# Enable GPIO
+CONFIG_GPIO=y
+
+# Build configurations
+CONFIG_BUILD_OUTPUT_UF2=y
+
+# Flash configuration
+CONFIG_MPU_ALLOW_FLASH_WRITE=y
+CONFIG_NVS=y
+CONFIG_SETTINGS_NVS=y
+CONFIG_FLASH=y
+CONFIG_FLASH_PAGE_LAYOUT=y
+CONFIG_FLASH_MAP=y
+
+# The full two-byte consumer report space has compatibility issues with some
+# operating systems, most notably macOS. Use the more basic single-byte usage
+# space.
+CONFIG_ZMK_HID_CONSUMER_REPORT_USAGES_BASIC=y
+
+# Work-around for Windows bug with battery notifications
+CONFIG_BT_GATT_ENFORCE_SUBSCRIPTION=n
