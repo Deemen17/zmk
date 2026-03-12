@@ -133,3 +133,15 @@ if (CONFIG_ZMK_STUDIO_RPC)
 endif()
 
 zephyr_cc_option(-Wfatal-errors)
+
+# Export firmware after successful build
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/zephyr/export_firmware.stamp
+    COMMAND bash ${CMAKE_SOURCE_DIR}/de_rename_firmware.sh
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/zephyr/export_firmware.stamp
+    DEPENDS ${CMAKE_BINARY_DIR}/zephyr/zmk.uf2
+)
+
+add_custom_target(export_firmware ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/zephyr/export_firmware.stamp
+)
