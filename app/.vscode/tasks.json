@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "prettier:check",
+			"problemMatcher": [],
+			"label": "npm: prettier:check",
+			"detail": "prettier --check boards/**/*.yml",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
