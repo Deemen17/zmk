@@ -1,0 +1,16 @@
+file_format: "1"
+id: de_nrf52840
+name: DE nRF52840 Keyboard
+type: board
+arch: arm
+features:
+  - keys
+  - underglow
+  - studio
+outputs:
+  - usb
+  - ble
+url: https://github.com/Deemen17/
+revisions:
+  - "1.0.0"
+default_revision: "1.0.0"

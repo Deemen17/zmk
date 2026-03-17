@@ -1,1 +1,0 @@
-target_sources(app PRIVATE ../../common/src/widget_pwm_new.c)
