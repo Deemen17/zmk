@@ -130,8 +130,6 @@ config ZMK_USB_BOOT
     depends on ZMK_USB
     select USB_HID_BOOT_PROTOCOL
 
-select USB_DEVICE_SOF
-
 if ZMK_USB
 
 config USB_NUMOF_EP_WRITE_RETRIES
@@ -423,7 +421,7 @@ config ZMK_RGB_UNDERGLOW_SPD_START
 
 config ZMK_RGB_UNDERGLOW_EFF_START
     int "RGB underglow start effect int value related to the effect enum list"
-    range 0 14
+    range 0 15
 
 config ZMK_RGB_UNDERGLOW_ON_START
     bool "RGB underglow starts on by default"
@@ -438,6 +436,10 @@ config ZMK_RGB_UNDERGLOW_AUTO_OFF_USB
 config EXPERIMENTAL_RGB_LAYER
     bool "Experimental per-key per-layer RGB underglow"
     default n
+
+config ZMK_RGB_UNDERGLOW_GAMMA_CORRECTION
+    bool "Gamma-correct RGB underglow output (perceptually uniform brightness)"
+    default y
 
 endif # ZMK_RGB_UNDERGLOW
 
@@ -491,6 +493,19 @@ config ZMK_BATTERY_REPORTING_FETCH_MODE_LITHIUM_VOLTAGE
 
 endchoice
 
+config ZMK_BATTERY_RGB_VOLTAGE_SAG_MV
+    int "RGB underglow voltage sag compensation (mV)"
+    depends on ZMK_BATTERY_REPORTING && ZMK_RGB_UNDERGLOW
+    default 0
+    range 0 500
+    help
+      When RGB underglow is on, battery voltage readings drop due to
+      increased current draw (especially with many LEDs). Set this to
+      compensate by adding the specified millivolts to the measured
+      voltage before calculating battery percentage.
+      Set to 0 to disable. Suggested starting value: 100-200 mV for
+      60+ LEDs, tune based on your actual measurements.
+
 endif # ZMK_BATTERY_REPORTING
 
 config ZMK_IDLE_TIMEOUT
@@ -500,6 +515,29 @@ config ZMK_IDLE_TIMEOUT
 config ZMK_IDLE_SKIP_ON_USB_POWER
     bool "Skip idle state when USB cable is plugged in (VBUS powered)"
     depends on USB_DEVICE_STACK
+
+config ZMK_UNRESPONSE_FIX
+    bool "Hardware watchdog that auto-resets the MCU if the firmware hangs or crashes"
+    depends on DT_HAS_NORDIC_NRF_WDT_ENABLED
+    select WATCHDOG
+    help
+      Starts the nRF hardware watchdog with a 5s timeout, fed every 1s from
+      a system workqueue item. If the firmware hard-faults or wedges, the MCU
+      resets itself instead of staying dead until the next power cycle.
+      The watchdog stops in System OFF (deep sleep / soft off), so it does
+      not affect sleep current. Adds ~3uA while active.
+
+config ZMK_UNRESPONSE_FIX_TX_STALL_MS
+    int "HID report TX stall timeout in ms before the watchdog stops being fed"
+    depends on ZMK_UNRESPONSE_FIX
+    default 30000
+    help
+      While the user is active and a link exists (BLE connected / USB
+      configured), the watchdog stops being fed when either a HID send has
+      failed and no report has gone out for this long, or reports have been
+      stuck in the BLE send queues for this long. This catches a wedged hog
+      work queue, Bluetooth stack or USB stack, and the watchdog then resets
+      the MCU. Normal typing pauses do not trigger this.
 
 config ZMK_SLEEP
     bool "Enable deep sleep support"
@@ -518,6 +556,22 @@ config ZMK_IDLE_SLEEP_TIMEOUT
     default 900000
 
 endif # ZMK_SLEEP
+
+menuconfig ZMK_MOTION
+    bool "Motion (IMU) features: case tap actions and carry sleep"
+    depends on SENSOR
+    depends on SETTINGS
+    depends on DT_HAS_ZMK_LIS2DH_ENABLED
+    depends on ZMK_LIS2DH_TRIGGER
+    select ZMK_BEHAVIOR_LOCAL_IDS
+    select ZMK_BEHAVIOR_LOCAL_IDS_IN_BINDINGS
+
+if ZMK_MOTION
+
+config ZMK_MOTION_TAP_SIDE_INVERT
+    bool "Invert case tap left/right side detection"
+
+endif # ZMK_MOTION
 
 config ZMK_EXT_POWER
     bool "Enable support to control external power output"

@@ -13,8 +13,10 @@ LOG_MODULE_DECLARE(zmk_studio, CONFIG_ZMK_STUDIO_LOG_LEVEL);
 #include <zmk/behavior.h>
 #include <zmk/matrix.h>
 #include <zmk/keymap.h>
+#include <zmk/combos.h>
 #include <zmk/studio/rpc.h>
 #include <zmk/physical_layouts.h>
+#include <zmk/behavior_hold_tap.h>
 
 #if IS_ENABLED(CONFIG_EXPERIMENTAL_RGB_LAYER) && IS_ENABLED(CONFIG_ZMK_KEYMAP_SETTINGS_STORAGE)
 #include <zmk/rgb_underglow_layer.h>
@@ -221,6 +223,20 @@ zmk_studio_Response save_changes(const zmk_studio_Request *req) {
         return KEYMAP_RESPONSE(save_changes, resp);
     }
 
+    ret = zmk_behavior_hold_tap_save_all();
+    if (ret < 0) {
+        LOG_WRN("Failed to save hold-tap configs (%d)", ret);
+        map_errno_to_save_resp(ret, &resp);
+        return KEYMAP_RESPONSE(save_changes, resp);
+    }
+
+    ret = zmk_combo_save_all();
+    if (ret < 0) {
+        LOG_WRN("Failed to save combo configs (%d)", ret);
+        map_errno_to_save_resp(ret, &resp);
+        return KEYMAP_RESPONSE(save_changes, resp);
+    }
+
 #if IS_ENABLED(CONFIG_EXPERIMENTAL_RGB_LAYER) && IS_ENABLED(CONFIG_ZMK_KEYMAP_SETTINGS_STORAGE)
     ret = zmk_rgb_layer_save();
     if (ret < 0) {
@@ -246,6 +262,16 @@ zmk_studio_Response discard_changes(const zmk_studio_Request *req) {
     ret = zmk_keymap_discard_changes();
     if (ret < 0) {
         return ZMK_RPC_SIMPLE_ERR(GENERIC);
+    }
+
+    ret = zmk_behavior_hold_tap_reload_from_settings();
+    if (ret < 0) {
+        LOG_WRN("Failed to discard hold-tap changes (%d)", ret);
+    }
+
+    ret = zmk_combo_reload_from_settings();
+    if (ret < 0) {
+        LOG_WRN("Failed to discard combo changes (%d)", ret);
     }
 
 #if IS_ENABLED(CONFIG_EXPERIMENTAL_RGB_LAYER) && IS_ENABLED(CONFIG_ZMK_KEYMAP_SETTINGS_STORAGE)
@@ -557,6 +583,8 @@ ZMK_RPC_SUBSYSTEM_HANDLER(keymap, remove_layer, ZMK_STUDIO_RPC_HANDLER_SECURED);
 ZMK_RPC_SUBSYSTEM_HANDLER(keymap, restore_layer, ZMK_STUDIO_RPC_HANDLER_SECURED);
 ZMK_RPC_SUBSYSTEM_HANDLER(keymap, set_layer_props, ZMK_STUDIO_RPC_HANDLER_SECURED);
 
-static int event_mapper(const zmk_event_t *eh, zmk_studio_Notification *n) { return 0; }
+// keymap has no event notifications of its own; never consume other
+// subsystems' events (returning 0 here would swallow every mapper after it)
+static int event_mapper(const zmk_event_t *eh, zmk_studio_Notification *n) { return -ENOTSUP; }
 
 ZMK_RPC_EVENT_MAPPER(keymap, event_mapper);

@@ -22,6 +22,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/pm.h>
 
 #include <zmk/activity.h>
+#include <zmk/watchdog.h>
 
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
 #include <zmk/usb.h>
@@ -86,6 +87,9 @@ void activity_work_handler(struct k_work *work) {
             return;
         }
 
+        // Keep the WDT frozen with a full window across System OFF (see zmk_pm_soft_off)
+        zmk_wdt_feed_now();
+
         sys_poweroff();
     } else
 #endif /* IS_ENABLED(CONFIG_ZMK_SLEEP) */
@@ -95,12 +99,20 @@ void activity_work_handler(struct k_work *work) {
                 set_state(ZMK_ACTIVITY_IDLE);
             }
 #else
-            set_state(ZMK_ACTIVITY_IDLE);
+        set_state(ZMK_ACTIVITY_IDLE);
 #endif
         }
 }
 
 K_WORK_DEFINE(activity_work, activity_work_handler);
+
+void zmk_activity_force_sleep(void) {
+#if IS_ENABLED(CONFIG_ZMK_SLEEP)
+    // backdate the idle clock so the work pass takes the normal sleep path
+    activity_last_uptime = k_uptime_get() - MAX_SLEEP_MS - MSEC_PER_SEC;
+    k_work_submit(&activity_work);
+#endif
+}
 
 void activity_expiry_function(struct k_timer *_timer) { k_work_submit(&activity_work); }
 
@@ -126,9 +138,7 @@ static void note_activity_work_cb(struct k_work *_work) { note_activity(); }
 
 K_WORK_DEFINE(note_activity_work, note_activity_work_cb);
 
-static void activity_input_listener(struct input_event *ev) {
-    k_work_submit(&note_activity_work);
-}
+static void activity_input_listener(struct input_event *ev) { k_work_submit(&note_activity_work); }
 
 INPUT_CALLBACK_DEFINE(NULL, activity_input_listener);
 

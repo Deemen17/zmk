@@ -11,9 +11,14 @@ target_sources(app PRIVATE msg_framing.c)
 target_sources(app PRIVATE rpc.c)
 target_sources(app PRIVATE core.c)
 target_sources(app PRIVATE behavior_subsystem.c)
+target_sources(app PRIVATE combo_subsystem.c)
 target_sources(app PRIVATE core_subsystem.c)
 target_sources(app PRIVATE keymap_subsystem.c)
 target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE lighting_subsystem.c)
+<<<<<<< HEAD
 target_sources_ifdef(CONFIG_ZMK_2G4 app PRIVATE pairing_subsystem.c)
+=======
+target_sources_ifdef(CONFIG_ZMK_MOTION app PRIVATE motion_subsystem.c)
+>>>>>>> remotes/ph-design/v0.3-lts
 target_sources_ifdef(CONFIG_ZMK_STUDIO_TRANSPORT_UART app PRIVATE uart_rpc_transport.c)
 target_sources_ifdef(CONFIG_ZMK_STUDIO_TRANSPORT_BLE app PRIVATE gatt_rpc_transport.c)

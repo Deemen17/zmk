@@ -33,6 +33,8 @@ target_sources(app PRIVATE src/sensors.c)
 target_sources_ifdef(CONFIG_ZMK_WPM app PRIVATE src/wpm.c)
 target_sources(app PRIVATE src/event_manager.c)
 target_sources_ifdef(CONFIG_ZMK_PM app PRIVATE src/pm.c)
+target_sources_ifdef(CONFIG_ZMK_UNRESPONSE_FIX app PRIVATE src/watchdog.c)
+target_sources_ifdef(CONFIG_ZMK_MOTION app PRIVATE src/motion.c src/events/motion_live_state_changed.c)
 target_sources_ifdef(CONFIG_ZMK_EXT_POWER app PRIVATE src/ext_power_generic.c)
 target_sources_ifdef(CONFIG_ZMK_GPIO_KEY_WAKEUP_TRIGGER app PRIVATE src/gpio_key_wakeup_trigger.c)
 target_sources(app PRIVATE src/events/activity_state_changed.c)
@@ -92,7 +94,6 @@ target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/behaviors/behavior
 if (CONFIG_ZMK_HID_INDICATORS)
   target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/behaviors/behavior_underglow_indicators.c)
 endif()
-target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/behaviors/behavior_underglow_battery.c)
 target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/events/underglow_color_changed.c)
 target_sources_ifdef(CONFIG_ZMK_BACKLIGHT app PRIVATE src/behaviors/behavior_backlight.c)
 
@@ -146,8 +147,13 @@ if (CONFIG_ZMK_STUDIO_RPC)
                         ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/behaviors.proto
                         ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/keymap.proto
                         ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/lighting.proto
+<<<<<<< HEAD
                         ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/motion.proto
                         ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/pairing.proto
+=======
+                        ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/combos.proto
+                        ${ZEPHYR_ZMK_STUDIO_MESSAGES_MODULE_DIR}/proto/zmk/motion.proto
+>>>>>>> remotes/ph-design/v0.3-lts
   )
 
   target_include_directories(app PUBLIC ${CMAKE_CURRENT_BINARY_DIR})

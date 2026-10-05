@@ -21,6 +21,7 @@
 #endif
 #include <zmk/endpoints.h>
 #include <zmk/hid.h>
+#include <zmk/watchdog.h>
 #include <dt-bindings/zmk/hid_usage_pages.h>
 #include <zmk/usb.h>
 #include <zmk/usb_hid.h>
@@ -317,6 +318,9 @@ static int send_keyboard_report(void) {
         int err = zmk_usb_hid_send_keyboard_report();
         if (err) {
             LOG_ERR("FAILED TO SEND OVER USB: %d", err);
+            zmk_wdt_note_tx_fail();
+        } else {
+            zmk_wdt_note_tx_ok();
         }
         return err;
 #else
@@ -361,6 +365,9 @@ static int send_consumer_report(void) {
         int err = zmk_usb_hid_send_consumer_report();
         if (err) {
             LOG_ERR("FAILED TO SEND OVER USB: %d", err);
+            zmk_wdt_note_tx_fail();
+        } else {
+            zmk_wdt_note_tx_ok();
         }
         return err;
 #else
@@ -421,6 +428,9 @@ int zmk_endpoints_send_mouse_report() {
         int err = zmk_usb_hid_send_mouse_report();
         if (err) {
             LOG_ERR("FAILED TO SEND OVER USB: %d", err);
+            zmk_wdt_note_tx_fail();
+        } else {
+            zmk_wdt_note_tx_ok();
         }
         return err;
 #else

@@ -9,9 +9,8 @@ static float breath_pulse(float phase_01) {
 }
 
 static void zmk_rgb_underglow_effect_breathing(void) {
-    struct color_hsl hsl = hsb_to_hsl(state.color);
     struct color_rgb_float rgb;
-    hsl_to_rgb_float(&hsl, &rgb);
+    user_color_rgb_float(&rgb);
 
     /* Smooth breathing using parabolic pulse */
     float val = breath_pulse(breathing_phase); /* 0..1 */
@@ -24,7 +23,7 @@ static void zmk_rgb_underglow_effect_breathing(void) {
     }
 
     /* Advance phase according to animation speed */
-    breathing_phase += anim_speed() * 0.003f;
+    breathing_phase += anim_speed() * 0.001f;
     if (breathing_phase >= 1.0f)
         breathing_phase -= 1.0f;
 }
